@@ -12551,17 +12551,14 @@ the type of y is &lt;class &#39;numpy.ndarray&#39;&gt;
 
 
 <span class="c1"># TODO: build an RNN to perform regression on our time series input/output data</span>
-
-<span class="c1">#create sequential model</span>
+<span class="c1"># Model architecture </span>
+<span class="c1"># Define sequential model</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
-<span class="c1">#model.add(LSTM(7,input_shape=X_train.shape[1:]))</span>
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="n">input_shape</span><span class="o">=</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+<span class="c1"># Include LSTM with 5 hidden nodes, the input shape input_shape=(window_size,1)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">window_size</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span>
+
+<span class="c1"># Include fully connected layer with one hidden unit</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-
-
-
-<span class="c1"># build model using keras documentation recommended optimizer initialization</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">RMSprop</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-08</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 
 <span class="c1"># build model using keras documentation recommended optimizer initialization</span>
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">RMSprop</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-08</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
@@ -13474,13 +13471,14 @@ ATDGGGMCkCUAxhhjTACyBMAYY4wJQJYAGGOMMQHo/wMPBdvsrbQUxQAAAABJRU5ErkJggg==
 
 
 <span class="c1"># remove as many non-english characters and character sequences as you can </span>
-<span class="c1"># remove all execept characters, comma, question mark,exscalamation</span>
+
 
 <span class="c1">#re.sub(pattern, repl, string[, count, flags])</span>
 <span class="c1">#sample_text= </span>
 <span class="c1">#sample_text = re.sub(r&#39;[^a-zA-Z.,!?\&#39;]&#39;, &#39; &#39;,sample_text)</span>
 <span class="c1">#print(sample_text)</span>
 
+<span class="c1"># remove all execept characters, fullstop comma, question mark, exclamation from text</span>
 <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^a-zA-Z.,!?</span><span class="se">\&#39;</span><span class="s1">]&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
 
     
@@ -13623,14 +13621,14 @@ $$\begin{array}{c|c}
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### TODO: fill out the function below that transforms the input text and window-size into a set of input/output pairs for use with our RNN model</span>
 <span class="k">def</span> <span class="nf">window_transform_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="n">window_size</span><span class="p">,</span><span class="n">step_size</span><span class="p">):</span>
     <span class="c1"># containers for input/output pairs</span>
-    <span class="c1">#inputs = []</span>
-    <span class="c1">#outputs = []</span>
-    <span class="n">inputs</span><span class="o">=</span> <span class="p">[</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">window_size</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">-</span><span class="n">window_size</span><span class="p">)]</span>
+    <span class="c1"># parse intput</span>
     
+    <span class="n">inputs</span><span class="o">=</span> <span class="p">[</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">window_size</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">-</span><span class="n">window_size</span><span class="p">)]</span>
+    <span class="c1"># Parse output </span>
     <span class="n">outputs</span><span class="o">=</span> <span class="p">[</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">window_size</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">-</span><span class="n">window_size</span><span class="p">)]</span>
     
     
-    
+    <span class="c1"># return parsed input, output</span>
     <span class="k">return</span> <span class="n">inputs</span><span class="p">,</span><span class="n">outputs</span>
 </pre></div>
 
@@ -13940,13 +13938,14 @@ $$a\longleftarrow\left[\begin{array}{c}
 <span class="kn">import</span> <span class="nn">random</span>
 
 <span class="c1"># TODO build the required RNN model: a single LSTM hidden layer with softmax activation, categorical_crossentropy loss </span>
-
+<span class="c1"># Model architecture </span>
+<span class="c1">#Define sequential model</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
-<span class="c1">#layer 1 should be an LSTM module with 200 hidden units -</span>
+<span class="c1">#Include LSTM with 200 hidden nodes, with input shape of window_size, len(chars))</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">window_size</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">chars</span><span class="p">))))</span>
-<span class="c1">#layer 2 should be a linear module, fully connected, with len(chars) hidden units</span>
+<span class="c1">#Include fully connected layer with hidden units of len(chars) or number of unique characters</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chars</span><span class="p">)))</span>
-<span class="c1">#layer 3 should be a softmax activation </span>
+<span class="c1">#Use softmax activation for solving multiclass classification based probability distribution </span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;softmax&#39;</span><span class="p">))</span>
 
 

@@ -26,13 +26,13 @@ def window_transform_series(series,window_size):
 
 # TODO: build an RNN to perform regression on our time series input/output data
 def build_part1_RNN(step_size, window_size):
-    #sequentail model
+    # Define sequential model
     model = Sequential()
 
-    # create LSTM layer input size window_size, step_size
+    # Include LSTM with 5 hidden nodes, the input shape (window_size, step_size )
     model.add(LSTM(5, input_shape=(window_size, step_size)))
 
-    # add dense of 1
+    # Include fully connected layer with one hidden unit
     model.add(Dense(1))
 
     #intialize optimizer
@@ -49,7 +49,7 @@ def clean_text(text):
     uniq_char = list(set(text))
     print(uniq_char)
 
-    # remove as many non-english characters and character sequences as you can
+    # remove as many non-english characters and character sequences as you can -  except characters, fullstop, comma, question mark, exclamation from text
     text = re.sub(r'[^a-zA-Z.,!?\']', ' ', text)
 
     # shorten any extra dead space created above
@@ -68,5 +68,5 @@ def window_transform_text(text,window_size,step_size):
     outputs = [text[i + window_size] for i in range(0, len(text) - window_size)]
     
 
-    
+    # return parsed input output
     return inputs,outputs
